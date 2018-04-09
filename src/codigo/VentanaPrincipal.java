@@ -27,17 +27,35 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
+        consulta();
     }
     private void consulta(){
+        //esto es un ejemplo de como se hace una query a una BBDD desde Java
         try{
             //indico el tipo de conexion que voy a usar
              Class.forName("com.mysql.jdbc.driver");
              conexion = DriverManager.getConnection("jdbc:mysql://127.0.0.1/centroestudios", "root", "root");
-        }  
-    catch (Exception e){}
-        
+             
+             estado = conexion.createStatement();
+             
+             resultado = estado.executeQuery("Select * from alumno");
+             
+            //recorre el array de resultados uno a uno
+             while (resultado.next()){
+                 System.out.println(resultado.getString("nombre"));
+             }
+        }
+    catch(SQLException s){
+     System.out.println("NO SE HA PODIDO CONECTAR CON EL SERVIDOR");
     }
-
+        catch(ClassNotFoundException c){
+         System.out.println("NO SE HA ENCONTRADO EL DRIVER");
+        }
+    catch (Exception e){
+            System.out.println(e.getMessage());
+            }
+    
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,8 +113,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             public void run() {
                 new VentanaPrincipal().setVisible(true);
             }
-        });
-    }
+        } ); 
+   }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
