@@ -156,6 +156,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2MousePressed
 
     private void jButton3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MousePressed
+        TextArea.setText("");
+        i++;
+        i++;
         consulta();
     }//GEN-LAST:event_jButton3MousePressed
 
