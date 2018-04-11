@@ -5,22 +5,27 @@
  */
 package codigo;
 
+import java.awt.TextArea;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author xp
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
-    Connection conexion;
-    Statement estado;
-    ResultSet resultado;
+    Connection conexion; //almacena la conexión al servidor de BBDD
+    Statement estado; // almacena el estado de la conexion
+    ResultSet resultado; // almacena el resultado de la consulta a la BBDD
     String[][] arrayResultado;
+    
+    //declaramos un arraylist para guardar el resultado de la consulta
     ArrayList<String[]> Lista = new ArrayList();
     /**
      * Creates new form VentanaPrincipal
@@ -31,29 +36,36 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
     private void consulta(){
         //esto es un ejemplo de como se hace una query a una BBDD desde Java
-        try{
+         try{
             //indico el tipo de conexion que voy a usar
              Class.forName("com.mysql.jdbc.driver");
              conexion = DriverManager.getConnection("jdbc:mysql://127.0.0.1/centroestudios", "root", "root");
              
              estado = conexion.createStatement();
              
-             resultado = estado.executeQuery("Select * from alumno");
+             resultado = estado.executeQuery("Select * from centroestudios.alumno");
              
+//             Lista.add();
             //recorre el array de resultados uno a uno
              while (resultado.next()){
+                 jTextArea1.append(Lista.toString());
+                 jTextArea1.append("\n");
                  System.out.println(resultado.getString("nombre"));
-             }
+             } 
         }
     catch(SQLException s){
      System.out.println("NO SE HA PODIDO CONECTAR CON EL SERVIDOR");
+     System.out.println(s.getMessage());
     }
         catch(ClassNotFoundException c){
          System.out.println("NO SE HA ENCONTRADO EL DRIVER");
+         System.out.println(c.getMessage());
         }
     catch (Exception e){
+            System.out.println("add");
             System.out.println(e.getMessage());
             }
+    
     
 }
     /**
@@ -65,21 +77,68 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("NOMBRE Y APELLIDO");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jButton1.setText("Consultar");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton1MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(154, 154, 154)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                        .addGap(142, 142, 142))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+        for (int i=0; i<Lista.size(); i++){
+            //jTextArea1.append(arrayResultado[i][1] + " \n");
+            jTextArea1.append(Lista.get(i)[0] + " " + Lista.get(i)[1] +" \n");
+        }
+    }//GEN-LAST:event_jButton1MousePressed
 
     /**
      * @param args the command line arguments
@@ -117,5 +176,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
